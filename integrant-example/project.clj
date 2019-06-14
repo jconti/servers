@@ -1,9 +1,15 @@
 (defproject integrant "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
-  :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
-            :url "https://www.eclipse.org/legal/epl-2.0/"}
-  :dependencies [[org.clojure/clojure "1.9.0"]]
+  :description "Server using Weavejester's 'Integrant' library"
+  :url "https://github.com/jconti/servers"
+
+  :dependencies [[org.clojure/clojure "1.10.0"]
+                 [org.clojure/spec.alpha "0.2.176"]
+                 [ring "1.7.1"]
+                 [seancorfield/next.jdbc "1.0.0"]
+                 [com.taoensso/timbre "4.10.0"]
+                 [com.microsoft/sqljdbc4 "4.2"]
+                 [integrant "0.7.0"]]
+
   :main ^:skip-aot integrant.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
