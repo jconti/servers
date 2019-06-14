@@ -1,5 +1,5 @@
 (defproject bare "0.1.0-SNAPSHOT"
-  :description "Basic server process example."
+  :description "Basic server process example, with dev-mode."
   :url "https://github.com/jconti/servers"
 
   :dependencies [[org.clojure/clojure "1.10.0"]
@@ -17,5 +17,11 @@
   :target-path "target/%s"
 
   ;; https://github.com/technomancy/leiningen/blob/master/doc/PROFILES.md
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+
+             ;; https://github.com/ring-clojure/ring#upgrade-notice
+             ;; https://github.com/clojure/tools.namespace#reloading-code-motivation
+             :dev {:dependencies [[javax.servlet/servlet-api "2.5"]
+                                  [org.clojure/tools.namespace "0.2.11"]]
+                   :source-paths ["dev"]}})
 
