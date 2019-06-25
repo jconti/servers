@@ -1,33 +1,16 @@
 (ns bare.web
   (:require
    [bare.logic :as logic]
-   [com.stuartsierra.component :as component]
+   [integrant.core :as ig]
    [ring.adapter.jetty :as jetty]))
 
-(defn start
-  [{:keys [configuration server db] :as this}]
-  (if server
-    this
-    (let [handler (logic/make-handler db)]
-      (assoc this
-             :handler handler
-             :server (jetty/run-jetty handler configuration)))))
+(require '[clojure.pprint])
 
-(defn stop
-  [{:keys [server] :as this}]
-  (if-not server
-    this
-    (do (.stop server)
-        (dissoc this :handler :server))))
+(defmethod ig/init-key :adapter/jetty [_ {:keys [port db] :as cfg}]
+  (let [handler (logic/make-handler db)]
+    {:handler handler
+     :server (jetty/run-jetty handler (assoc cfg :join? false))}))
 
-(defn web-config
-  "Make an options map for ring.jetty/run-jetty from a program-config"
-  [{:keys [http-port] :as program-config}]
-  {:port (or http-port 4000) :join? false})
-
-(defn create
-  [configuration]
-  (with-meta
-    {:configuration (web-config configuration)}
-    {`component/start start
-     `component/stop stop}))
+(defmethod ig/halt-key! :adapter/jetty [_ {:keys [server]}]
+  (.stop server)
+  nil)
